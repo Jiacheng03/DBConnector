@@ -38,8 +38,12 @@ Result* DBConnector::Query(string sql)
 {
 	if (mysql_real_query(&m_dbConn, sql.c_str(), (unsigned long)sql.length()) != 0)
 		return NULL;
+	
+	MYSQL_RES * res = mysql_store_result(&m_dbConn);
+	if (!res)
+		return NULL;
 
-	return new(nothrow)Result(mysql_store_result(&m_dbConn));
+	return new(nothrow)Result(res);
 }
 
 // 执行更新/插入/删除语句. 若失败，则返回false.
@@ -75,7 +79,9 @@ Result::~Result()
 // 若结果集为空，则返回true
 bool Result::IsEmpty()
 {
-	return (m_res == NULL);
+	// 这里是为ResultSet调用IsEmpty考虑：
+	// 智能指针引用空对象时，this为NULL
+	return (this==NULL || m_res == NULL);
 }
 
 // 返回结果集的总行数
