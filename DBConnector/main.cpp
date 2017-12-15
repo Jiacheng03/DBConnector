@@ -5,7 +5,7 @@ using namespace std;
 
 int main()
 {
-	const char host[] = "localhost";
+	const char host[] = "192.168.245.128";
 	const char user[] = "jc";	
 	const char passwd[] = "asdqwe123";
 	const char dbname[] = "test";
@@ -14,8 +14,9 @@ int main()
 	// 初始化连接
 	DBConnector dbconn(host, user, passwd, dbname, port, "gbk");
 	if (!dbconn.Initialize())
-	{
-		cerr << "DBConnector Connect Fail ..." << endl;
+	{		
+		cerr << dbconn.GetErrno() << endl;
+		cerr << dbconn.GetErrMsg() << endl;
 		system("pause");
 		exit(1);
 	}
@@ -26,7 +27,7 @@ int main()
 
 	if (!res)
 	{
-		cout << "result is empty" << endl;
+		cout << dbconn.GetErrMsg() << endl;
 		system("pause");
 		exit(2);
 	}

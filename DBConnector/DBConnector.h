@@ -30,6 +30,12 @@ public:
 	// 执行更新/插入/删除语句. 若失败，则返回false.
 	bool Update(string sql);
 
+	// 获取错误码
+	unsigned int GetErrno();
+
+	// 获取错误信息
+	const char* GetErrMsg();	
+
 private:
 	string m_host;
 	string m_user;
@@ -39,6 +45,8 @@ private:
 	string m_charset;
 
 	MYSQL m_dbConn;
+	unsigned int m_errno;
+	string m_error;
 };
 
 //======================================= Result ===============================================//

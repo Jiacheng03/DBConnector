@@ -24,11 +24,16 @@ bool DBConnector::Initialize()
 
 	// 若连接成功，设置连接使用的字符集
 	if (conn != NULL)
-	{
+	{		
 		string sql = string("set names ") + m_charset;
 		mysql_real_query(&m_dbConn, sql.c_str(), (unsigned long)sql.length());
 	}
-
+	else
+	{		
+		m_errno = mysql_errno(&m_dbConn);
+		m_error = mysql_error(&m_dbConn);
+	}
+	
 	return (conn != NULL);
 }
 
@@ -36,12 +41,16 @@ bool DBConnector::Initialize()
 // 若返回为空，则返回NULL，即结果集为空
 Result* DBConnector::Query(string sql)
 {
-	if (mysql_real_query(&m_dbConn, sql.c_str(), (unsigned long)sql.length()) != 0)
+	MYSQL_RES * res = NULL;
+
+	// 若查询失败，或返回的结果集为空
+	if (mysql_real_query(&m_dbConn, sql.c_str(), (unsigned long)sql.length()) != 0 ||
+		(res = mysql_store_result(&m_dbConn)) == NULL)
+	{
+		m_errno = mysql_errno(&m_dbConn);
+		m_error = mysql_error(&m_dbConn);
 		return NULL;
-	
-	MYSQL_RES * res = mysql_store_result(&m_dbConn);
-	if (!res)
-		return NULL;
+	}
 
 	return new(nothrow)Result(res);
 }
@@ -50,8 +59,25 @@ Result* DBConnector::Query(string sql)
 bool DBConnector::Update(string sql)
 {
 	if (mysql_real_query(&m_dbConn, sql.c_str(), (unsigned long)sql.length()) != 0)
+	{
+		m_errno = mysql_errno(&m_dbConn);
+		m_error = mysql_error(&m_dbConn);
 		return false;
+	}
+
 	return true;
+}
+
+// 获取错误码
+unsigned int DBConnector::GetErrno()
+{
+	return m_errno;
+}
+
+// 获取错误信息
+const char* DBConnector::GetErrMsg()
+{
+	return m_error.c_str();
 }
 
 
