@@ -7,7 +7,7 @@ int main()
 {
 	const char host[] = "192.168.245.128";
 	const char user[] = "jc";	
-	const char passwd[] = "asdqwe123";
+	const char passwd[] = "asdqwe";
 	const char dbname[] = "test";
 	unsigned int port = 3306;
 
@@ -27,7 +27,7 @@ int main()
 
 	if (!res)
 	{
-		cout << dbconn.GetErrMsg() << endl;
+		cerr << dbconn.GetErrMsg() << endl;
 		system("pause");
 		exit(2);
 	}
