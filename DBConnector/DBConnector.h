@@ -5,7 +5,12 @@
 
 #pragma once
 
+#ifdef _MSC_VER
 #include <mysql.h>
+#else
+#include <mysql/mysql.h>
+#endif
+
 #include <string>
 #include <unordered_map>
 #include <memory>

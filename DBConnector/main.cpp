@@ -12,7 +12,12 @@ int main()
 	unsigned int port = 3306;
 
 	// 初始化连接
+#ifdef _MSC_VER
 	DBConnector dbconn(host, user, passwd, dbname, port, "gbk");
+#else
+	DBConnector dbconn(host, user, passwd, dbname, port);
+#endif
+
 	if (!dbconn.Initialize())
 	{		
 		cerr << dbconn.GetErrno() << endl;
