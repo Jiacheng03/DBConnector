@@ -44,6 +44,8 @@ int main()
 		cout << "    SIZE: " << res->GetInt("SIZE") << endl;
 	}
 
+#ifdef _MSC_VER
 	system("pause");
+#endif
 	return 0;
 }
