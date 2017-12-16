@@ -27,7 +27,7 @@ int main()
 	}
 
 	// 查询，并获取结果集
-	string sql = "SELECT NAME,SIZE FROM BOOK";
+	string sql = "SELECT * FROM BOOK";
 	ResultSet res(dbconn.Query(sql));
 
 	if (!res)
@@ -40,8 +40,10 @@ int main()
 	// 从结果集中逐行取数据
 	while (res->FetchOne())
 	{
+		cout << "      ID: " << res->GetInt("id") << endl;
 		cout << "BOOKNAME: " << res->GetStr("NAME") << endl;
 		cout << "    SIZE: " << res->GetInt("SIZE") << endl;
+		cout << "    DATE: " << res->GetStr("DATE") << endl;
 	}
 
 #ifdef _MSC_VER

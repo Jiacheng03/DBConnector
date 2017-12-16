@@ -1,4 +1,5 @@
 #include "DBConnector.h"
+#include <algorithm>
 
 //================================= DBConnector ======================================//
 // 成员初始化
@@ -92,7 +93,9 @@ Result::Result(MYSQL_RES* res)
 	for (unsigned int i = 0; i < m_res->field_count; i++)
 	{
 		MYSQL_FIELD* field = m_res->fields + i;
-		m_fidmap[field->name] = i;
+		string fidname = field->name;
+		transform(fidname.begin(), fidname.end(), fidname.begin(), ::toupper);
+		m_fidmap[fidname] = i;
 	}
 }
 
@@ -131,7 +134,11 @@ const char* Result::GetStr(string fidname)
 	if (m_row == NULL)
 		return NULL;
 
-	int index = m_fidmap[fidname];
+	// 转为大写字母
+	string FIDNAME = fidname;
+	transform(FIDNAME.begin(), FIDNAME.end(), FIDNAME.begin(), ::toupper);
+
+	int index = m_fidmap[FIDNAME];
 	return m_row[index];
 }
 
@@ -141,7 +148,11 @@ int Result::GetInt(string fidname)
 	if (m_row == NULL)
 		return 0;
 
-	int index = m_fidmap[fidname];
+	// 转为大写字母
+	string FIDNAME = fidname;
+	transform(FIDNAME.begin(), FIDNAME.end(), FIDNAME.begin(), ::toupper);
+
+	int index = m_fidmap[FIDNAME];
 	return atoi(m_row[index]);
 }
 
@@ -151,7 +162,11 @@ double Result::GetDouble(string fidname)
 	if (m_row == NULL)
 		return 0.0;
 
-	int index = m_fidmap[fidname];
+	// 转为大写字母
+	string FIDNAME = fidname;
+	transform(FIDNAME.begin(), FIDNAME.end(), FIDNAME.begin(), ::toupper);
+
+	int index = m_fidmap[FIDNAME];
 	return atof(m_row[index]);
 }
 
