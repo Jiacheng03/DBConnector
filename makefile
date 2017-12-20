@@ -15,10 +15,18 @@ CFLAGS := -std=c++11
 
 all: clean build
 
+debug: clean debug_build
+
 build:
 	test -d $(TARGET_PATH) || mkdir -p $(TARGET_PATH)
 	$(CC) -c $(CFLAGS) $(SRCS)
 	$(CC) -o $(TARGET) $(OBJS) $(CFLAGS) $(LIBS)
+	$(RM) $(OBJS)
+
+debug_build:
+	test -d $(TARGET_PATH) || mkdir -p $(TARGET_PATH)
+	$(CC) -c $(CFLAGS) $(SRCS) -g
+	$(CC) -o $(TARGET) $(OBJS) $(CFLAGS) $(LIBS) -g
 	$(RM) $(OBJS)
 
 clean:
