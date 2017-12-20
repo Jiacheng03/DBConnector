@@ -30,7 +30,7 @@ int main()
 	string sql = "SELECT * FROM BOOK";
 	ResultSet res(dbconn.Query(sql));
 
-	if (!res)
+	if (res->IsEmpty())
 	{
 		cerr << dbconn.GetErrMsg() << endl;
 		system("pause");
