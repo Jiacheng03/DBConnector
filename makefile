@@ -11,7 +11,7 @@ OBJS := $(patsubst $(SRC_PATH)/%.cpp, ./%.o, $(SRCS))
 
 LIBS := -lmysqlclient
 
-CFLAGS := -std=c++11
+CFLAGS := -std=c++11 -Wall
 
 all: clean build
 
